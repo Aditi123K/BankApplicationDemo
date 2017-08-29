@@ -8,5 +8,17 @@ namespace BankApplicationDemo
 {
     public class Customer
     {
+
+        string _fullName;
+       
+        public Customer(string fullName)
+        {
+           _fullName = fullName;
+        }
+        /*Future properties
+         
+         DOB,Address,ContactNumber etc
+         
+        */
     }
 }
