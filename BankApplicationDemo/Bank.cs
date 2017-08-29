@@ -14,14 +14,18 @@ namespace BankApplicationDemo
 
         public Bank(string bankName)
         {
-
             _bankName = bankName;
         }
         public void AddBankAccount(BankAccount bankAccountObj)
         {
             BankAccounts.Add(bankAccountObj);
         }
-        public void RemoveBankAccount(int accountNumber)
-        { }
+        public void RemoveBankAccount(string accountNumber)
+        {
+
+            var bankAccountToBeRemoved =(BankAccount) from BankAccount in BankAccounts where BankAccount.AccountNumber.Equals(accountNumber)
+                              select BankAccount;
+            BankAccounts.Remove(bankAccountToBeRemoved);
+        }
     }
 }
