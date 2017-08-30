@@ -50,7 +50,6 @@ namespace BankApplicationDemo.Tests
         }
 
         //Overdraft Withdraw
-        
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WithdrawOverdraftTest()
@@ -59,7 +58,13 @@ namespace BankApplicationDemo.Tests
                 investmentAccount.Withdraw(7000.0M);
         }
 
-
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void DepositZeroAmountTest()
+        {
+            BankAccount investmentAccount = new BankAccount(new Customer("Mike"), AccountType.IndividualInvestment, 5000.0M);
+            investmentAccount.Deposit(0.0M);
+        }
         [TestMethod()]
         public void DepositTest()
         {
