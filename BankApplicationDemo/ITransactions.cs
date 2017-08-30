@@ -13,7 +13,6 @@ namespace BankApplicationDemo
         void Withdraw(decimal amount);
         decimal CheckBalance();
         void TransferMoney(decimal amount, BankAccount ac);
-        bool isOverDraftCase(decimal amount);
-       
+        bool IsOverDraftCase(decimal amount);
     }
 }
