@@ -11,46 +11,52 @@ namespace BankApplicationDemo
         string _bankName;
         public List<BankAccount> BankAccounts { get; set; }
 
-        public Bank()
-        {
-            throw new Exception(Constants.BankCustomerCompulsoryMsg);
-        } 
+       
         public Bank(string bankName)
         {
             try
             {
                 _bankName = bankName;
+                BankAccounts = new List<BankAccount>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             
         }
         public void AddBankAccount(BankAccount bankAccountObj)
         {
-            BankAccounts.Add(bankAccountObj);
+            try
+            {
+                BankAccounts.Add(bankAccountObj);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(Constants.AddBankAccountFailedMsg);
+            }
+           
         }
         public void RemoveBankAccount(string accountNumber)
         {
 
-            try
-            {
-                var bankAccountToBeRemoved = (BankAccount)from BankAccount in BankAccounts
-                                                          where BankAccount.AccountNumber.Equals(accountNumber)
-                                                          select BankAccount;
-                BankAccounts.Remove(bankAccountToBeRemoved);
-            }
-            catch (ArgumentNullException ex)
-            {
-
-                throw new ArgumentNullException();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            
+                bool isRemoved = false;
+                foreach (BankAccount bankAccountToBeRemoved in this.BankAccounts)
+                {
+                    if (String.Equals(bankAccountToBeRemoved.AccountNumber,accountNumber))
+                    {
+                        this.BankAccounts.Remove(bankAccountToBeRemoved);
+                        isRemoved = true;
+                        break;
+                    }
+                }
+                if (!isRemoved)
+                    throw new ArgumentNullException(Constants.BankAccountNotPresentMsg);
+            
+            
         }
     }
 }

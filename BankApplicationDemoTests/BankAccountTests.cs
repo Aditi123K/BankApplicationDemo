@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankApplicationDemo.Tests
 {
+    
     [TestClass()]
     public class BankAccountTests
     {
@@ -22,54 +23,64 @@ namespace BankApplicationDemo.Tests
             }
             catch (Exception ex)
             {
-                if (StringAssert.Equals(ex.Message, "Bank account creation failed."))
+                if (StringAssert.Equals(ex.Message, Constants.BankAccountCreationFailedMsg))
                     return;
 
             }
-            Assert.Fail("No exception while creating bank account.");
+           
         }
+
+        //Regular withdraw
         [TestMethod()]
         public void WithdrawTest()
         {
 
-            try
-            {
-
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                if (StringAssert.Equals(ex.Message, "Individual Investment accounts can withdraw up to $1,000 at a time."))
-                    return;
-                else if (StringAssert.Equals(ex.Message, "It is not permissible to overdraft an account."))
-                    return;
-            }
-            catch (Exception ex)
-            {
-
-                if (StringAssert.Equals(ex.Message, "Bank account creation failed."))
-                    return;
-            }
-
-            Assert.Fail();
+            BankAccount corporateInvestmentAccount = new BankAccount(new Customer("RCN"), AccountType.CorporateInvestment, 5000.0M);
+            corporateInvestmentAccount.Withdraw(2000.0M);
+            Assert.AreEqual(3000.0M, corporateInvestmentAccount.Balance);
         }
+
+        // Individual Investment Constraint
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void WithdrawLimitTest()
+        {
+                BankAccount investmentAccount = new BankAccount(new Customer("Alex"), AccountType.IndividualInvestment, 5000.0M);
+                investmentAccount.Withdraw(2000.0M);
+        }
+
+        //Overdraft Withdraw
+        
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void WithdrawOverdraftTest()
+        {
+                BankAccount investmentAccount = new BankAccount(new Customer("Alex"), AccountType.IndividualInvestment, 5000.0M);
+                investmentAccount.Withdraw(7000.0M);
+        }
+
+
         [TestMethod()]
         public void DepositTest()
         {
 
             try
             {
-
+                BankAccount checkingAccount = new BankAccount(new Customer("Joe"), AccountType.Checking, 1000.0M);
+                checkingAccount.Deposit(1000.0M);
+                Assert.AreEqual(2000.0M, checkingAccount.Balance);
             }
             catch (Exception ex)
             {
 
-                if (StringAssert.Equals(ex.Message, "Bank account creation failed."))
+                if (StringAssert.Equals(ex.Message, Constants.DepositFailedMsg))
                     return;
+                throw new Exception(Constants.DepositFailedMsg, ex.InnerException);
             }
 
 
 
-            Assert.Fail();
+         
         }
         [TestMethod()]
         public void TransferMoneyTest()
@@ -85,9 +96,15 @@ namespace BankApplicationDemo.Tests
                 if (StringAssert.Equals(ex.Message, "Bank account creation failed."))
                     return;
             }
-            Assert.Fail();
+            
         }
 
-       
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void BankAccountTestOwnerCompulsory()
+        {
+            BankAccount b = new BankAccount(AccountType.CorporateInvestment, 123344.990M);
+        }
     }
+   
 }

@@ -12,8 +12,12 @@ namespace BankApplicationDemo
         private Constants() { }
 
         public const string BankCustomerCompulsoryMsg = "Bank account must have a owner.";
-        public const string BankCreationFailedMsg = "Bank account creation failed.";
+        public const string BankAccountCreationFailedMsg = "Bank account creation failed.";
         public const string BankAccountNotPresentMsg = "Bank account not found";
+        public const string AddBankAccountFailedMsg = "Bank account could not be addded to Bank.";
+       
+
+
 
         public const string WithdrawLimitRuleMsg = "Individual Investment accounts can withdraw up to $1,000 at a time.";
         public const string WithdrawFailed = "Withdraw transaction failed!";

@@ -14,7 +14,11 @@ namespace BankApplicationDemo
         public string AccountNumber { get; set; }
 
         
+        public BankAccount (AccountType accountType, decimal amount)
+        {
 
+            throw new ArgumentException(Constants.BankCustomerCompulsoryMsg);
+        } // Creating of BankAccount without owner will throw exception.
         public BankAccount(Customer custOwner,AccountType accountType,decimal amount)
         {
             _accountType = accountType;
@@ -27,7 +31,7 @@ namespace BankApplicationDemo
             catch (Exception ex)
             {
 
-                throw new Exception(Constants.BankCreationFailedMsg);
+                throw new Exception(Constants.BankAccountCreationFailedMsg);
             }
             
             
@@ -44,24 +48,24 @@ namespace BankApplicationDemo
                     if (this._accountType == AccountType.IndividualInvestment)
                     {
                         if (amount > 1000.0M)
-                            throw new ArgumentOutOfRangeException("Individual Investment accounts can withdraw up to $1,000 at a time.");
+                            throw new ArgumentOutOfRangeException(Constants.WithdrawLimitRuleMsg);
                     }
                     _balance -= amount;
                 }
                 else
                 {
                     /*Implementing Business Rule:•	It is not permissible to overdraft an account.*/
-                    throw new ArgumentOutOfRangeException("It is not permissible to overdraft an account.");
+                    throw new ArgumentOutOfRangeException(Constants.OverDraftRuleMsg);
                 }
             }
             catch (ArgumentOutOfRangeException ex)
             {
-
-                throw ex;
+                throw new ArgumentOutOfRangeException(Constants.WithdrawFailed,ex.InnerException);
+               
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
-                throw new Exception("Withdraw transaction failed!");
+                throw ex1;
             }
             
         }
@@ -71,18 +75,17 @@ namespace BankApplicationDemo
             {
                 /*This validation is useful so user does not deposit 0 or negative amount. */
                 if (amount <= 0.0M)
-                    throw new ArgumentOutOfRangeException("Deposit of 0 or negative amount not valid.");
+                    throw new ArgumentOutOfRangeException(Constants.DepositMinAmountMsg);
                 _balance += amount;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw ex;
-
+                throw new ArgumentOutOfRangeException(Constants.DepositMinAmountMsg,ex.InnerException);
             }
             catch (Exception e)
             {
-
-                throw new Exception ("Deposit transaction failed!");
+                throw e;
+                
 
             }
             
@@ -99,12 +102,12 @@ namespace BankApplicationDemo
             catch (ArgumentOutOfRangeException ex)
             {
 
-                throw ex;
+                throw new Exception(Constants.TransferFailed,ex.InnerException);
             }
-            catch (Exception e)
+            catch (Exception ex1)
             {
-
-                throw new Exception("TransferMoney transaction failed!");
+                throw ex1;
+                
             }
             
         }
@@ -114,9 +117,12 @@ namespace BankApplicationDemo
                 return true;
             return false;
         }
-        public decimal CheckBalance()
+        public decimal Balance
         {
-            return _balance;
+            get
+            {
+                return _balance;
+            }
         }
     }
 
