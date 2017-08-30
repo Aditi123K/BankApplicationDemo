@@ -108,7 +108,6 @@ namespace BankApplicationDemo.Tests
             catch (ArgumentOutOfRangeException ex)
             {
 
-               // if (StringAssert.Equals(ex.Message, Constants.TransferFailed))
                     throw new ArgumentOutOfRangeException(Constants.TransferFailed, ex.InnerException);
             }
            
