@@ -83,20 +83,36 @@ namespace BankApplicationDemo.Tests
          
         }
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TransferMoneyTest()
         {
 
+                BankAccount LuisCheckingAccount = new BankAccount(new Customer("Luis"), AccountType.Checking, 8000.0M);
+                BankAccount HealyCheckingAccount = new BankAccount(new Customer("Healy"), AccountType.Checking, 1000.0M);
+                LuisCheckingAccount.TransferMoney(9000.0M, HealyCheckingAccount);
+                Assert.AreEqual(6000.0M, LuisCheckingAccount.Balance);
+                Assert.AreEqual(3000.0M, HealyCheckingAccount.Balance);
+            
+        }
+        [TestMethod()]
+        public void TransferMoneyPassTest()
+        {
             try
             {
-
+                BankAccount LuisCheckingAccount = new BankAccount(new Customer("Luis"), AccountType.Checking, 8000.0M);
+                BankAccount HealyCheckingAccount = new BankAccount(new Customer("Healy"), AccountType.Checking, 1000.0M);
+                LuisCheckingAccount.TransferMoney(2000.0M, HealyCheckingAccount);
+                Assert.AreEqual(6000.0M, LuisCheckingAccount.Balance);
+                Assert.AreEqual(3000.0M, HealyCheckingAccount.Balance);
             }
-            catch (Exception ex)
+            catch (ArgumentOutOfRangeException ex)
             {
 
-                if (StringAssert.Equals(ex.Message, "Bank account creation failed."))
-                    return;
+               // if (StringAssert.Equals(ex.Message, Constants.TransferFailed))
+                    throw new ArgumentOutOfRangeException(Constants.TransferFailed, ex.InnerException);
             }
-            
+           
+
         }
 
         [TestMethod()]

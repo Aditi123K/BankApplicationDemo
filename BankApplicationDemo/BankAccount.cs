@@ -102,7 +102,7 @@ namespace BankApplicationDemo
             catch (ArgumentOutOfRangeException ex)
             {
 
-                throw new Exception(Constants.TransferFailed,ex.InnerException);
+                throw new ArgumentOutOfRangeException(Constants.TransferFailed,ex.InnerException);
             }
             catch (Exception ex1)
             {
